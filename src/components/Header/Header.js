@@ -1,129 +1,222 @@
-import React from 'react';
-import styled from 'styled-components/macro';
+import React, { useEffect } from "react";
+import styled, { keyframes } from "styled-components/macro";
 
-import { QUERIES, WEIGHTS } from '../../constants';
-import Logo from '../Logo';
-import Icon from '../Icon';
-import UnstyledButton from '../UnstyledButton';
-import SuperHeader from '../SuperHeader';
-import MobileMenu from '../MobileMenu';
-import VisuallyHidden from '../VisuallyHidden';
+import { QUERIES, WEIGHTS } from "../../constants";
+import Logo from "../Logo";
+import Icon from "../Icon";
+import UnstyledButton from "../UnstyledButton";
+import SuperHeader from "../SuperHeader";
+import MobileMenu from "../MobileMenu";
+import VisuallyHidden from "../VisuallyHidden";
 
 const Header = () => {
-  const [showMobileMenu, setShowMobileMenu] = React.useState(false);
+   const [showMobileMenu, setShowMobileMenu] = React.useState(false);
 
-  return (
-    <header>
-      <SuperHeader />
-      <MainHeader>
-        <LogoWrapper>
-          <Logo />
-        </LogoWrapper>
-        <DesktopNav>
-          <NavLink href="/sale">Sale</NavLink>
-          <NavLink href="/new">New&nbsp;Releases</NavLink>
-          <NavLink href="/men">Men</NavLink>
-          <NavLink href="/women">Women</NavLink>
-          <NavLink href="/kids">Kids</NavLink>
-          <NavLink href="/collections">Collections</NavLink>
-        </DesktopNav>
-        <MobileActions>
-          <ShoppingBagButton>
-            <Icon id="shopping-bag" />
-            <VisuallyHidden>Open cart</VisuallyHidden>
-          </ShoppingBagButton>
-          <UnstyledButton>
-            <Icon id="search" />
-            <VisuallyHidden>Search</VisuallyHidden>
-          </UnstyledButton>
-          <UnstyledButton onClick={() => setShowMobileMenu(true)}>
-            <Icon id="menu" />
-            <VisuallyHidden>Open menu</VisuallyHidden>
-          </UnstyledButton>
-        </MobileActions>
-        <Filler />
-      </MainHeader>
+   // This is to reset the flag so there is always a state change when
+   // it is set to true by clicking on the hamburger menu. Without this
+   // effect there is no state change after the user exits the modal
+   // by clicking the overlay or hitting escape, and the modal will
+   // not display when using the Radix component.
+   useEffect(() => {
+      if (showMobileMenu === true) setShowMobileMenu(false);
+   }, [showMobileMenu]);
 
-      <MobileMenu
-        isOpen={showMobileMenu}
-        onDismiss={() => setShowMobileMenu(false)}
-      />
-    </header>
-  );
+   return (
+      <header>
+         <SuperHeader />
+         <MainHeader>
+            <LogoWrapper>
+               <Logo />
+            </LogoWrapper>
+            <DesktopNav>
+               <NavLinkWrapper>
+                  <NavLink className="first" href="/sale">
+                     Sale
+                  </NavLink>
+                  <BoldNavLink className="first" href="/sale">
+                     Sale
+                  </BoldNavLink>
+               </NavLinkWrapper>
+               <NavLinkWrapper>
+                  <NavLink href="/new">New&nbsp;Releases</NavLink>
+                  <BoldNavLink href="/new">New&nbsp;Releases</BoldNavLink>
+               </NavLinkWrapper>
+               <NavLinkWrapper>
+                  <NavLink href="/men">Men</NavLink>
+                  <BoldNavLink href="/men">Men</BoldNavLink>
+               </NavLinkWrapper>
+               <NavLinkWrapper>
+                  <NavLink href="/women">Women</NavLink>
+                  <BoldNavLink href="/women">Women</BoldNavLink>
+               </NavLinkWrapper>
+               <NavLinkWrapper>
+                  <NavLink href="/kids">Kids</NavLink>
+                  <BoldNavLink href="/kids">Kids</BoldNavLink>
+               </NavLinkWrapper>
+               <NavLinkWrapper>
+                  <NavLink href="/collections">Collections</NavLink>
+                  <BoldNavLink href="/collections">Collections</BoldNavLink>
+               </NavLinkWrapper>
+            </DesktopNav>
+            <MobileActions>
+               <ShoppingBagButton>
+                  <Icon id="shopping-bag" />
+                  <VisuallyHidden>Open cart</VisuallyHidden>
+               </ShoppingBagButton>
+               <UnstyledButton>
+                  <Icon id="search" />
+                  <VisuallyHidden>Search</VisuallyHidden>
+               </UnstyledButton>
+               <UnstyledButton onClick={() => setShowMobileMenu(true)}>
+                  <Icon id="menu" />
+                  <VisuallyHidden>Open menu</VisuallyHidden>
+               </UnstyledButton>
+            </MobileActions>
+            <Filler />
+         </MainHeader>
+
+         <MobileMenu
+            isOpen={showMobileMenu}
+            onDismiss={() => setShowMobileMenu(false)}
+         />
+      </header>
+   );
 };
 
 const MainHeader = styled.div`
-  display: flex;
-  align-items: baseline;
-  padding: 18px 32px;
-  border-bottom: 1px solid var(--color-gray-300);
-  overflow: auto;
+   display: flex;
+   align-items: baseline;
+   padding: 18px 32px;
+   border-bottom: 1px solid var(--color-gray-300);
+   overflow: auto;
 
-  @media ${QUERIES.tabletAndSmaller} {
-    justify-content: space-between;
-    align-items: center;
-    border-top: 4px solid var(--color-gray-900);
-  }
+   @media ${QUERIES.tabletAndSmaller} {
+      justify-content: space-between;
+      align-items: center;
+      border-top: 4px solid var(--color-gray-900);
+   }
 
-  @media ${QUERIES.phoneAndSmaller} {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
+   @media ${QUERIES.phoneAndSmaller} {
+      padding-left: 16px;
+      padding-right: 16px;
+   }
 `;
 
 const DesktopNav = styled.nav`
-  display: flex;
-  gap: clamp(1rem, 9.2vw - 4.5rem, 3.5rem);
-  margin: 0px 48px;
+   display: flex;
+   gap: clamp(1rem, 9.2vw - 4.5rem, 3.5rem);
+   margin: 0px 48px;
 
-  @media ${QUERIES.tabletAndSmaller} {
-    display: none;
-  }
+   @media ${QUERIES.tabletAndSmaller} {
+      display: none;
+   }
 `;
 
 const MobileActions = styled.div`
-  display: none;
+   display: none;
 
-  @media ${QUERIES.tabletAndSmaller} {
-    gap: 32px;
-    display: flex;
-  }
+   @media ${QUERIES.tabletAndSmaller} {
+      gap: 32px;
+      display: flex;
+   }
 
-  @media ${QUERIES.phoneAndSmaller} {
-    gap: 16px;
-  }
+   @media ${QUERIES.phoneAndSmaller} {
+      gap: 16px;
+   }
 `;
 
 const LogoWrapper = styled.div`
-  flex: 1;
+   flex: 1;
 
-  @media ${QUERIES.tabletAndSmaller} {
-    flex: revert;
-  }
+   @media ${QUERIES.tabletAndSmaller} {
+      flex: revert;
+   }
 `;
 
 const ShoppingBagButton = styled(UnstyledButton)`
-  transform: translateX(-2px);
+   transform: translateX(-2px);
 `;
 
 const Filler = styled.div`
-  flex: 1;
+   flex: 1;
 
-  @media ${QUERIES.tabletAndSmaller} {
-    display: none;
-  }
+   @media ${QUERIES.tabletAndSmaller} {
+      display: none;
+   }
 `;
 
-const NavLink = styled.a`
-  font-size: 1.125rem;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: var(--color-gray-900);
-  font-weight: ${WEIGHTS.medium};
+const flip1 = keyframes`
+   from {
+      transform: translateY(0);
+      opacity: 1;
+   }
+   to {
+      transform: translateY(-50%);
+      opacity: 0;
+   }
+`;
+const flip2 = keyframes`
+   from {
+      transform: translateY(0);
+      opacity: 0;
+   }
+   to {
+      transform: translateY(-100%);
+      opacity: 1;
+   }
+`;
+const flip3 = keyframes`
+   from {
+      transform: translateY(-50%);
+      opacity: 0;
+   }
+   to {
+      transform: translateY(0);
+      opacity: 1;
+   }
+`;
+const flip4 = keyframes`
+from {
+   transform: translateY(-100%);
+   opacity: 1;
+}
+to {
+   transform: translateY(0);
+   opacity: 0;
+}
+`;
 
-  &:first-of-type {
-    color: var(--color-secondary);
-  }
+const NavLinkWrapper = styled.div``;
+
+const NavLink = styled.a`
+   display: block;
+   font-size: 1.125rem;
+   text-transform: uppercase;
+   text-decoration: none;
+   color: var(--color-gray-900);
+   font-weight: ${WEIGHTS.medium};
+   line-height: 1.25rem;
+   animation: ${flip3} 200ms both;
+   animation-delay: 100ms;
+
+   &.first {
+      color: var(--color-secondary);
+   }
+
+   ${NavLinkWrapper}:hover & {
+      animation: ${flip1} 200ms both;
+   }
+`;
+
+const BoldNavLink = styled(NavLink)`
+   font-weight: ${WEIGHTS.bold};
+   animation: ${flip4} 200ms both;
+   opacity: 0;
+
+   ${NavLinkWrapper}:hover & {
+      animation: ${flip2} 200ms both;
+      animation-delay: 100ms;
+   }
 `;
 
 export default Header;

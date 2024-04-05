@@ -1,101 +1,148 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import styled from 'styled-components/macro';
-import { DialogOverlay, DialogContent } from '@reach/dialog';
+import React, { useRef, useEffect } from "react";
+import styled, { keyframes } from "styled-components/macro";
+import * as Dialog from "@radix-ui/react-dialog";
 
-import { QUERIES, WEIGHTS } from '../../constants';
+import UnstyledButton from "../UnstyledButton";
+import Icon from "../Icon";
+import VisuallyHidden from "../VisuallyHidden";
 
-import UnstyledButton from '../UnstyledButton';
-import Icon from '../Icon';
-import VisuallyHidden from '../VisuallyHidden';
-
-const MobileMenu = ({ isOpen, onDismiss }) => {
-  return (
-    <Overlay isOpen={isOpen} onDismiss={onDismiss}>
-      <Content aria-label="Menu">
-        <CloseButton onClick={onDismiss}>
-          <Icon id="close" />
-          <VisuallyHidden>Dismiss menu</VisuallyHidden>
-        </CloseButton>
-        <Filler />
-        <Nav>
-          <NavLink href="/sale">Sale</NavLink>
-          <NavLink href="/new">New&nbsp;Releases</NavLink>
-          <NavLink href="/men">Men</NavLink>
-          <NavLink href="/women">Women</NavLink>
-          <NavLink href="/kids">Kids</NavLink>
-          <NavLink href="/collections">Collections</NavLink>
-        </Nav>
-        <Footer>
-          <SubLink href="/terms">Terms and Conditions</SubLink>
-          <SubLink href="/privacy">Privacy Policy</SubLink>
-          <SubLink href="/contact">Contact Us</SubLink>
-        </Footer>
-      </Content>
-    </Overlay>
-  );
-};
-
-const Overlay = styled(DialogOverlay)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--color-backdrop);
-  display: flex;
-  justify-content: flex-end;
+const fadeIn = keyframes`
+   from {
+      opacity: 0;
+   }
+   to {
+      opacity: 0.5;
+   }
+`;
+const slideIn = keyframes`
+   from {
+      transform: translateX(100%);
+      opacity: 0;
+   }
+   to {
+      transform: translateX(0);
+      opacity: 1;
+   }
 `;
 
-const Content = styled(DialogContent)`
-  background: white;
-  width: 300px;
-  height: 100%;
-  padding: 24px 32px;
-  display: flex;
-  flex-direction: column;
+const Overlay = styled(Dialog.Overlay)`
+   position: fixed;
+   top: 0;
+   left: 0;
+   height: 100%;
+   width: 100%;
+   background: var(--modal-overlay-background);
+   animation: ${fadeIn} 1000ms both;
 `;
 
-const CloseButton = styled(UnstyledButton)`
-  position: absolute;
-  top: 10px;
-  right: 0;
-  padding: 16px;
+const Content = styled(Dialog.Content)`
+   position: fixed;
+   top: 0;
+   left: 20%;
+   height: 100%;
+   width: 80%;
+   background-color: var(--color-white);
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   animation: ${slideIn} 1000ms both;
+`;
+
+const Close = styled(Dialog.Close)`
+   position: absolute;
+   top: 0;
+   right: 0;
+   display: flex;
+   justify-content: flex-end;
+   padding: 26px 16px;
+   outline: none;
 `;
 
 const Nav = styled.nav`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+   display: flex;
+   flex-direction: column;
+   gap: 22px;
+   padding-left: 32px;
+   animation: ${slideIn} 1000ms 500ms both;
+
+   & a {
+      text-decoration: none;
+      text-transform: uppercase;
+      color: var(--color-gray-900);
+      font-size: 112%;
+
+      &:hover {
+         text-decoration: underline;
+      }
+
+      &:first-of-type {
+         color: var(--color-secondary);
+      }
+   }
 `;
 
-const NavLink = styled.a`
-  color: var(--color-gray-900);
-  font-weight: ${WEIGHTS.medium};
-  text-decoration: none;
-  font-size: 1.125rem;
-  text-transform: uppercase;
-
-  &:first-of-type {
-    color: var(--color-secondary);
-  }
-`;
-
-const Filler = styled.div`
-  flex: 1;
-`;
 const Footer = styled.footer`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  justify-content: flex-end;
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   padding: 32px 32px;
+   display: flex;
+   flex-direction: column;
+   gap: 14px;
+   animation: ${slideIn} 1000ms 1000ms both;
+
+   & a {
+      text-decoration: none;
+      color: var(--color-gray-700);
+      font-size: 90%;
+
+      &:hover {
+         text-decoration: underline;
+      }
+   }
 `;
 
-const SubLink = styled.a`
-  color: var(--color-gray-700);
-  font-size: 0.875rem;
-  text-decoration: none;
-`;
+const MobileMenu = ({ isOpen, onDismiss }) => {
+   const triggerRef = useRef(null);
+
+   // Trigger the opening of the modal. With the Radix Dialog
+   // nothing happens without this trigger.
+   useEffect(() => {
+      isOpen && triggerRef.current.click();
+   });
+
+   return (
+      <Dialog.Root>
+         <Dialog.Trigger asChild>
+            <UnstyledButton ref={triggerRef} />
+         </Dialog.Trigger>
+         <Dialog.Portal>
+            <Overlay />
+            <Content>
+               <Close asChild>
+                  <UnstyledButton onClick={onDismiss} aria-label="Close">
+                     <Icon id={"close"} size={24} />
+                     <VisuallyHidden>Dismiss Menu</VisuallyHidden>
+                  </UnstyledButton>
+               </Close>
+               <Nav>
+                  <a href="/sale">Sale</a>
+                  <a href="/new">New&nbsp;Releases</a>
+                  <a href="/men">Men</a>
+                  <a href="/women">Women</a>
+                  <a href="/kids">Kids</a>
+                  <a href="/collections">Collections</a>
+               </Nav>
+               <Footer>
+                  <a href="/terms">Terms and Conditions</a>
+                  <a href="/privacy">Privacy Policy</a>
+                  <a href="/contact">Contact Us</a>
+               </Footer>
+            </Content>
+         </Dialog.Portal>
+      </Dialog.Root>
+   );
+};
 
 export default MobileMenu;

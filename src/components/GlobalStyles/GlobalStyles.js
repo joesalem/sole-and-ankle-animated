@@ -1,5 +1,5 @@
-import { createGlobalStyle } from 'styled-components/macro';
-import { COLORS } from '../../constants';
+import { createGlobalStyle } from "styled-components/macro";
+import { COLORS } from "../../constants";
 
 const GlobalStyles = createGlobalStyle`
 /* http://meyerweb.com/eric/tools/css/reset/
@@ -82,7 +82,10 @@ html {
   /*
     Silence the warning about missing Reach Dialog styles
   */
-  --reach-dialog: 1;
+  --opacity-low: ${" / 0.25"};
+  --opacity-medium: ${" / 0.5"};
+  --opacity-high: ${" / 0.75"};
+  --modal-overlay-background: hsl(204, 40%, 50%);
 }
 
 html, body, #root {
