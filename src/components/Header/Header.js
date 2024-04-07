@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
-import styled, { keyframes } from "styled-components/macro";
+import styled from "styled-components/macro";
 
-import { QUERIES, WEIGHTS } from "../../constants";
+import { QUERIES } from "../../constants";
 import Logo from "../Logo";
 import Icon from "../Icon";
 import UnstyledButton from "../UnstyledButton";
 import SuperHeader from "../SuperHeader";
 import MobileMenu from "../MobileMenu";
 import VisuallyHidden from "../VisuallyHidden";
+import SlidingNavLink from "../SlidingNavLink";
 
 const Header = () => {
    const [showMobileMenu, setShowMobileMenu] = React.useState(false);
@@ -29,34 +30,12 @@ const Header = () => {
                <Logo />
             </LogoWrapper>
             <DesktopNav>
-               <NavLinkWrapper>
-                  <NavLink className="first" href="/sale">
-                     Sale
-                  </NavLink>
-                  <BoldNavLink className="first" href="/sale">
-                     Sale
-                  </BoldNavLink>
-               </NavLinkWrapper>
-               <NavLinkWrapper>
-                  <NavLink href="/new">New&nbsp;Releases</NavLink>
-                  <BoldNavLink href="/new">New&nbsp;Releases</BoldNavLink>
-               </NavLinkWrapper>
-               <NavLinkWrapper>
-                  <NavLink href="/men">Men</NavLink>
-                  <BoldNavLink href="/men">Men</BoldNavLink>
-               </NavLinkWrapper>
-               <NavLinkWrapper>
-                  <NavLink href="/women">Women</NavLink>
-                  <BoldNavLink href="/women">Women</BoldNavLink>
-               </NavLinkWrapper>
-               <NavLinkWrapper>
-                  <NavLink href="/kids">Kids</NavLink>
-                  <BoldNavLink href="/kids">Kids</BoldNavLink>
-               </NavLinkWrapper>
-               <NavLinkWrapper>
-                  <NavLink href="/collections">Collections</NavLink>
-                  <BoldNavLink href="/collections">Collections</BoldNavLink>
-               </NavLinkWrapper>
+               <SlidingNavLink href="/sale">Sale</SlidingNavLink>
+               <SlidingNavLink href="/new">New&nbsp;Releases</SlidingNavLink>
+               <SlidingNavLink href="/men">Men</SlidingNavLink>
+               <SlidingNavLink href="/women">Women</SlidingNavLink>
+               <SlidingNavLink href="/kids">Kids</SlidingNavLink>
+               <SlidingNavLink href="/collections">Collections</SlidingNavLink>
             </DesktopNav>
             <MobileActions>
                <ShoppingBagButton>
@@ -142,80 +121,6 @@ const Filler = styled.div`
 
    @media ${QUERIES.tabletAndSmaller} {
       display: none;
-   }
-`;
-
-const flip1 = keyframes`
-   from {
-      transform: translateY(0);
-      opacity: 1;
-   }
-   to {
-      transform: translateY(-50%);
-      opacity: 0;
-   }
-`;
-const flip2 = keyframes`
-   from {
-      transform: translateY(0);
-      opacity: 0;
-   }
-   to {
-      transform: translateY(-100%);
-      opacity: 1;
-   }
-`;
-const flip3 = keyframes`
-   from {
-      transform: translateY(-50%);
-      opacity: 0;
-   }
-   to {
-      transform: translateY(0);
-      opacity: 1;
-   }
-`;
-const flip4 = keyframes`
-from {
-   transform: translateY(-100%);
-   opacity: 1;
-}
-to {
-   transform: translateY(0);
-   opacity: 0;
-}
-`;
-
-const NavLinkWrapper = styled.div``;
-
-const NavLink = styled.a`
-   display: block;
-   font-size: 1.125rem;
-   text-transform: uppercase;
-   text-decoration: none;
-   color: var(--color-gray-900);
-   font-weight: ${WEIGHTS.medium};
-   line-height: 1.25rem;
-   animation: ${flip3} 200ms both;
-   animation-delay: 100ms;
-
-   &.first {
-      color: var(--color-secondary);
-   }
-
-   ${NavLinkWrapper}:hover & {
-      animation: ${flip1} 200ms both;
-   }
-`;
-
-const BoldNavLink = styled(NavLink)`
-   font-weight: ${WEIGHTS.bold};
-   animation: ${flip4} 200ms both;
-   opacity: 0;
-
-   ${NavLinkWrapper}:hover & {
-      animation: ${flip2} 200ms both;
-      animation-delay: 100ms;
    }
 `;
 
